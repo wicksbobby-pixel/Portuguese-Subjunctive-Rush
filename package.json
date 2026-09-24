@@ -1,0 +1,8 @@
+{
+  "name": "verb-rush",
+  "private": true,
+  "description": "Timed trigger-recognition drill for Brazilian Portuguese subjunctive and personal infinitive",
+  "scripts": {
+    "test": "node test/run.js"
+  }
+}
