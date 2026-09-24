@@ -63,7 +63,7 @@
     if (bare.endsWith('ar')) return 'ar';
     if (bare.endsWith('er')) return 'er';
     if (bare.endsWith('ir')) return 'ir';
-    if (bare === 'por') return 'er'; // pôr is historically poer
+    if (bare.endsWith('or')) return 'er'; // pôr and compounds (propor) are historically -er
     throw new Error('Unknown conjugation class: ' + inf);
   }
 

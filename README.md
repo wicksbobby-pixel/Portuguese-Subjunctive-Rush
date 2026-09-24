@@ -9,6 +9,11 @@ Open `index.html` in a browser. There's no build step and nothing to install. Ru
 - **Variety:** Brazilian Portuguese, four person slots (eu / você·ele·ela / nós / vocês·eles·elas). European Portuguese would need a real 2sg (tu) slot in every paradigm plus data and frames for it. That's a rework, not a patch.
 - **Drilled:** presente, imperfeito and futuro do subjuntivo, plus the infinitivo pessoal (4 × 4 = 16 cells).
 - **Not drilled:** the indicative. It appears only in trigger context and is never offered as an option.
+- **Learner level:** Duolingo Score 129, the top of the B2 band (100–129). The default **B2** vocabulary adds derived irregulars that inherit a base verb's pattern: manter/obter/conter (ter), propor (pôr, no circumflex), prever/rever (ver → *previr*), intervir (vir), desfazer/satisfazer (fazer). It also adds *requerer*, which looks like querer but has a regular preterite, plus B2 regular verbs and adult-register complements. **Core** limits rounds to the original seed set. The profile lives in `LEARNER` in `data.js`.
+
+## Home screen
+
+Round settings and Start, stat tiles (questions, accuracy, average answer time, rounds and best), a recent-rounds trend, the 4×4 cell grid shaded by accuracy, the three weakest trigger categories (min. 3 attempts), all categories, and recent misses. Stats are kept in localStorage in this browser only.
 
 ## Files
 

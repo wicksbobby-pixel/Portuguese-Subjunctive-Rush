@@ -1,5 +1,6 @@
 /*
- * ui.js — timed 3-option drilling loop, miss feedback, summary, scorecard.
+ * ui.js — home (start + stats), timed 3-option drilling loop, miss feedback,
+ * round summary.
  */
 (function () {
   'use strict';
@@ -24,11 +25,12 @@
 
   let session = null;
   let round = null; // { length, timeMs, highlight, i, score, misses, times }
-  let current = null; // { q, start, answered, raf }
+  let current = null; // { q, start, answered, raf, advance }
 
-  // ---------- screens ----------
+  // ---------- helpers ----------
   function show(name) {
     for (const s of document.querySelectorAll('.screen')) s.hidden = s.id !== 'screen-' + name;
+    if (name === 'home') renderHome();
   }
 
   function esc(s) {
@@ -49,18 +51,91 @@
   }
 
   function cellsLabel(cells) {
-    // Group persons by tense: "fut. subj. 1sg/3sg"
     const byTense = {};
     for (const c of cells) (byTense[c.tense] = byTense[c.tense] || []).push(c.person);
     return Object.entries(byTense).map(([t, ps]) => C.TENSE_LABELS[t] + ' ' + ps.join('/')).join(' · ');
   }
 
+  function pct(acc) {
+    return acc == null ? '–' : Math.round(acc * 100) + '%';
+  }
+
+  function secs(ms) {
+    return ms == null ? '–' : (ms / 1000).toFixed(1) + ' s';
+  }
+
+  // ---------- home ----------
+  const SHORT_PERSON = { '1sg': 'eu', '3sg': 'ele', '1pl': 'nós', '3pl': 'eles' };
+
+  function renderHome() {
+    const t = card.totals();
+    const has = t.n > 0;
+    $('home-empty').hidden = has;
+    $('home-stats').hidden = !has;
+    if (!has) return;
+
+    const tiles = [
+      ['Questions', String(t.n)],
+      ['Accuracy', pct(t.acc)],
+      ['Avg answer', secs(t.avgMs)],
+      ['Rounds', t.rounds + (t.bestPct != null ? ' <span class="tile-sub">best ' + t.bestPct + '%</span>' : '')],
+    ];
+    $('tiles').innerHTML = tiles.map(([k, v]) => '<div class="tile"><div class="tile-k">' + k + '</div><div class="tile-v">' + v + '</div></div>').join('');
+
+    // Recent rounds: one bar per round, height = accuracy.
+    const rounds = card.rounds().slice(-20);
+    const strip = $('rounds-strip');
+    strip.setAttribute('aria-label', 'Accuracy of the last ' + rounds.length + ' rounds: ' + rounds.map((r) => Math.round((100 * r.ok) / r.n) + '%').join(', '));
+    strip.innerHTML = rounds.length
+      ? rounds.map((r) => {
+          const p = Math.round((100 * r.ok) / r.n);
+          const when = new Date(r.t).toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+          return '<div class="bar" title="' + when + ' · ' + r.ok + '/' + r.n + ' (' + p + '%)"><span style="height:' + Math.max(p, 2) + '%"></span></div>';
+        }).join('')
+      : '<p class="muted">Finish a round to start the trend.</p>';
+
+    // 4×4 cell grid, shaded by accuracy (single hue, light → dark).
+    let html = '<table class="grid"><thead><tr><th></th>' + C.PERSONS.map((p) => '<th title="' + esc(C.PERSON_LABELS[p]) + '">' + SHORT_PERSON[p] + '</th>').join('') + '</tr></thead><tbody>';
+    for (const tn of C.TENSES) {
+      html += '<tr><th>' + esc(C.TENSE_LABELS[tn]) + '</th>';
+      for (const p of C.PERSONS) {
+        const st = card.cell(tn, p);
+        const shade = st.acc == null ? '' : ' style="--shade:' + Math.round(8 + st.acc * 52) + '%"';
+        html += '<td class="' + (st.acc == null ? 'none' : 'heat') + '"' + shade + ' title="' + esc(C.cellLabel(tn, p)) + ': ' + st.ok + '/' + st.n + '">' + pct(st.acc) + '<span class="n">' + st.n + '</span></td>';
+      }
+      html += '</tr>';
+    }
+    $('card-grid').innerHTML = html + '</tbody></table>';
+
+    // Weakest trigger categories (need a few attempts to count).
+    const cats = Object.entries(D.TRIGGER_CATEGORIES).map(([k, c]) => ({ k, c, st: card.cat(k) }));
+    const weak = cats.filter((x) => x.st.n >= 3).sort((a, b) => a.st.acc - b.st.acc).slice(0, 3);
+    $('weak-cats').innerHTML = weak.length
+      ? weak.map(({ c, st }) => '<li><b>' + esc(c.label) + '</b> · ' + pct(st.acc) + ' of ' + st.n + '<span class="rule">' + esc(c.rule) + '</span></li>').join('')
+      : '<li class="muted">Needs at least 3 attempts in a category.</li>';
+    const sorted = cats.slice().sort((a, b) => (a.st.acc == null) - (b.st.acc == null) || (a.st.acc || 0) - (b.st.acc || 0));
+    $('card-cats').innerHTML =
+      '<thead><tr><th>Category</th><th>Acc.</th><th>n</th></tr></thead><tbody>' +
+      sorted.map(({ c, st }) => '<tr><td>' + esc(c.label) + '<span class="rule">' + esc(c.rule) + '</span></td><td>' + pct(st.acc) + '</td><td>' + st.n + '</td></tr>').join('') +
+      '</tbody>';
+
+    const misses = card.recentMisses().slice(0, 5);
+    $('recent-misses').innerHTML = misses.length
+      ? misses.map((m) => '<li>' + esc(m.sentence.replace('___', '[' + m.answer + ']')) + '<div class="meta">' + esc(C.cellLabel(m.tense, m.person)) + ' · ' + esc(m.trigger) + (m.chosen ? ' · you: ' + esc(m.chosen) : ' · timed out') + '</div></li>').join('')
+      : '<li class="muted">None yet.</li>';
+  }
+
   // ---------- round ----------
+  function readSettings() {
+    return { length: +$('set-length').value, time: +$('set-time').value, vocab: $('set-vocab').value, highlight: $('set-highlight').checked };
+  }
+
   function startRound() {
-    const s = { length: +$('set-length').value, time: +$('set-time').value, highlight: $('set-highlight').checked };
+    const s = readSettings();
     saveSettings(s);
-    if (!session) session = E.createSession();
+    if (!session || session.vocab !== s.vocab) session = E.createSession({ vocab: s.vocab });
     round = { length: s.length, timeMs: s.time * 1000, highlight: s.highlight, i: 0, score: 0, misses: [], times: [] };
+    current = null;
     show('drill');
     nextQuestion();
   }
@@ -75,8 +150,9 @@
 
     $('q-progress').textContent = round.i + ' / ' + round.length;
     $('q-score').textContent = round.score + ' correct';
-    $('q-sentence').innerHTML = renderSentence(q, '<span class="blank" id="blank">&nbsp;</span>', round.highlight);
-    $('q-verb').innerHTML = '<b>' + esc(q.verb) + '</b> · ' + esc(q.verbGloss);
+    $('q-sentence').innerHTML = renderSentence(q, '<span class="blank">&nbsp;</span>', round.highlight);
+    // Core verbs are known at this level: show the infinitive only. B2 additions get a gloss.
+    $('q-verb').innerHTML = '<b>' + esc(q.verb) + '</b>' + (q.verbTier === 'b2' ? ' · ' + esc(q.verbGloss) : '');
     const fb = $('q-feedback');
     fb.hidden = true;
     fb.className = 'feedback';
@@ -94,7 +170,8 @@
 
   function runTimer() {
     const bar = $('timer-bar');
-    if (!round.timeMs) { bar.style.transform = 'scaleX(1)'; return; }
+    bar.style.transform = 'scaleX(1)';
+    if (!round.timeMs) return;
     const tick = () => {
       if (!current || current.answered) return;
       const frac = 1 - (performance.now() - current.start) / round.timeMs;
@@ -118,7 +195,6 @@
     if (correct) round.score += 1;
     else round.misses.push({ q, chosen });
 
-    // Mark options and reveal each option's cell(s).
     [...$('q-options').children].forEach((b, i) => {
       const o = q.options[i];
       b.disabled = true;
@@ -127,6 +203,7 @@
       b.insertAdjacentHTML('beforeend', '<span class="cell">' + esc(cellsLabel(o.cells)) + '</span>');
     });
     $('q-sentence').innerHTML = renderSentence(q, '<span class="blank ' + (correct ? 'filled-good' : 'filled-bad') + '">' + esc(q.answer) + '</span>', true);
+    $('q-verb').innerHTML = '<b>' + esc(q.verb) + '</b> · ' + esc(q.verbGloss);
     $('q-score').textContent = round.score + ' correct';
 
     const fb = $('q-feedback');
@@ -152,11 +229,13 @@
   }
 
   function endRound() {
+    if (current) clearTimeout(current.advance);
     current = null;
+    const total = round.times.reduce((a, b) => a + b, 0);
+    card.recordRound({ n: round.length, ok: round.score, ms: total });
     const acc = Math.round((100 * round.score) / round.length);
-    const avg = round.times.length ? (round.times.reduce((a, b) => a + b, 0) / round.times.length / 1000).toFixed(1) : '–';
     $('sum-title').textContent = round.score + ' / ' + round.length;
-    $('sum-stats').textContent = acc + '% correct · ' + avg + ' s average';
+    $('sum-stats').textContent = acc + '% correct · ' + secs(total / round.length) + ' average';
     $('sum-misses').innerHTML = round.misses
       .map(({ q, chosen }) =>
         '<li>' + renderSentence(q, '<b>' + esc(q.answer) + '</b>', true) +
@@ -166,47 +245,31 @@
     show('summary');
   }
 
-  // ---------- scorecard ----------
-  function pct(st) {
-    return st.acc == null ? '–' : Math.round(st.acc * 100) + '%';
-  }
-
-  function renderCard() {
-    let html = '<table class="grid"><thead><tr><th></th>' + C.PERSONS.map((p) => '<th title="' + esc(C.PERSON_LABELS[p]) + '">' + esc(({ '1sg': 'eu', '3sg': 'ele', '1pl': 'nós', '3pl': 'eles' })[p]) + '</th>').join('') + '</tr></thead><tbody>';
-    for (const t of C.TENSES) {
-      html += '<tr><th>' + esc(C.TENSE_LABELS[t]) + '</th>';
-      for (const p of C.PERSONS) {
-        const st = card.cell(t, p);
-        html += '<td>' + pct(st) + '<span class="n">' + st.n + '</span></td>';
-      }
-      html += '</tr>';
-    }
-    $('card-grid').innerHTML = html + '</tbody></table>';
-
-    const rows = Object.entries(D.TRIGGER_CATEGORIES)
-      .map(([k, c]) => ({ k, c, st: card.cat(k) }))
-      .sort((a, b) => (a.st.acc == null) - (b.st.acc == null) || (a.st.acc || 0) - (b.st.acc || 0));
-    $('card-cats').innerHTML =
-      '<thead><tr><th>Category</th><th>Acc.</th><th>n</th></tr></thead><tbody>' +
-      rows.map(({ c, st }) => '<tr><td>' + esc(c.label) + '<span class="rule">' + esc(c.rule) + '</span></td><td>' + pct(st) + '</td><td>' + st.n + '</td></tr>').join('') +
-      '</tbody>';
-    show('card');
+  // Quitting mid-round keeps answered questions in the stats but records no round.
+  function quit() {
+    if (current) { current.answered = true; cancelAnimationFrame(current.raf); clearTimeout(current.advance); }
+    current = null;
+    show('home');
   }
 
   // ---------- wiring ----------
+  const L = D.LEARNER;
+  $('learner-chip').textContent = L.source.replace('Duolingo Score', 'Duolingo') + ' ' + L.score + ' · ' + L.cefr;
+  $('learner-chip').title = L.source + ' ' + L.score + ': ' + L.note;
+  $('set-vocab').options[0].textContent = L.cefr + ' (' + L.source.replace('Duolingo Score', 'Duolingo') + ' ' + L.score + ')';
+
   const s = loadSettings();
   if (s.length) $('set-length').value = String(s.length);
   if (s.time != null) $('set-time').value = String(s.time);
+  if (s.vocab) $('set-vocab').value = s.vocab;
   $('set-highlight').checked = !!s.highlight;
 
   $('btn-start').addEventListener('click', startRound);
   $('btn-again').addEventListener('click', startRound);
-  $('btn-home').addEventListener('click', () => show('start'));
-  $('btn-card').addEventListener('click', renderCard);
-  $('btn-card2').addEventListener('click', renderCard);
-  $('btn-card-back').addEventListener('click', () => show(round ? 'summary' : 'start'));
-  $('btn-card-reset').addEventListener('click', () => {
-    if (confirm('Reset all scorecard data?')) { card.reset(); renderCard(); }
+  $('btn-home').addEventListener('click', () => show('home'));
+  $('btn-quit').addEventListener('click', quit);
+  $('btn-reset').addEventListener('click', () => {
+    if (confirm('Reset all stats?')) { card.reset(); renderHome(); }
   });
 
   document.addEventListener('keydown', (e) => {
@@ -216,8 +279,9 @@
       answer(+e.key - 1);
     } else if (current && current.answered && (e.key === 'Enter' || e.key === ' ')) {
       e.preventDefault();
-      clearTimeout(current.advance);
       nextQuestion();
     }
   });
+
+  show('home');
 })();

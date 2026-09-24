@@ -76,8 +76,8 @@
     { id: 'v-prefiro', cat: 'volition', tense: 'presSubj', trigger: 'Prefiro que', text: 'Prefiro que {S} ___ {O}.', persons: NOT_1SG, confusable: ['impSubj', 'futSubj', 'persInf'], why: 'preferir que (preference over someone else’s action) → presente do subjuntivo.' },
     { id: 'v-queriam', cat: 'volition', tense: 'impSubj', trigger: 'queriam que', text: 'Eles queriam que {S} ___ {O}.', persons: ['1sg', '3sg', '1pl'], confusable: ['presSubj', 'futSubj', 'persInf'], why: 'wanting → subjuntivo; past main verb (queriam) → imperfeito.' },
     { id: 'v-eraimportante', cat: 'volition', tense: 'impSubj', trigger: 'Era importante que', text: 'Era importante que {S} ___ {O}.', persons: ALL, confusable: ['presSubj', 'futSubj', 'persInf'], why: 'era importante que + finite clause → imperfeito do subjuntivo (past main verb).' },
-    { id: 'v-sugeri', cat: 'volition', tense: 'impSubj', trigger: 'Sugeri que', text: 'Sugeri que {S} ___ {O}.', persons: NOT_1SG, confusable: ['presSubj', 'futSubj', 'persInf'], why: 'suggestion → subjuntivo; past main verb (sugeri) → imperfeito.' },
-    { id: 'v-pediu', cat: 'volition', tense: 'impSubj', trigger: 'pediu que', text: 'O médico pediu que {S} ___ {O}.', persons: ['1sg', '1pl', '3pl'], confusable: ['presSubj', 'futSubj', 'persInf'], why: 'request (pedir que) → subjuntivo; past main verb (pediu) → imperfeito.' },
+    { id: 'v-sugeri', cat: 'volition', tense: 'impSubj', trigger: 'Sugeri que', text: 'Sugeri que {S} ___ {O}.', persons: NOT_1SG, confusable: ['futSubj', 'persInf'], why: 'suggestion → subjuntivo; past main verb (sugeri) → imperfeito.' },
+    { id: 'v-pediu', cat: 'volition', tense: 'impSubj', trigger: 'pediu que', text: 'O médico pediu que {S} ___ {O}.', persons: ['1sg', '1pl', '3pl'], confusable: ['futSubj', 'persInf'], why: 'request (pedir que) → subjuntivo; past main verb (pediu) → imperfeito.' },
 
     // ---- concession ----
     { id: 'k-embora', cat: 'concession', tense: 'presSubj', trigger: 'Embora', text: 'Embora {S} ___ {O}, a situação continua difícil.', persons: ALL, confusable: ['futSubj', 'persInf'], why: 'embora always takes the subjuntivo, even for true facts; present context → presente.' },
@@ -88,11 +88,11 @@
 
     // ---- purpose / condition conjunctions ----
     { id: 'j-paraque', cat: 'conjunction', tense: 'presSubj', trigger: 'para que', text: 'Vou explicar tudo para que {S} ___ {O}.', persons: NOT_1SG, confusable: ['impSubj', 'futSubj', 'persInf'], why: 'para que (purpose) + finite clause → presente do subjuntivo. Para without que would take the infinitivo pessoal.' },
-    { id: 'j-antesque', cat: 'conjunction', tense: 'presSubj', trigger: 'antes que', text: 'Precisamos sair antes que {S} ___ {O}.', persons: ['1sg', '3sg', '3pl'], confusable: ['impSubj', 'futSubj', 'persInf'], why: 'antes que → presente do subjuntivo, never the futuro. Antes de would take the infinitivo pessoal.' },
+    { id: 'j-antesque', cat: 'conjunction', tense: 'presSubj', trigger: 'antes que', text: 'Precisamos sair antes que {S} ___ {O}.', persons: ['3sg', '3pl'], confusable: ['impSubj', 'futSubj', 'persInf'], why: 'antes que → presente do subjuntivo, never the futuro. Antes de would take the infinitivo pessoal.' },
     { id: 'j-anaoser', cat: 'conjunction', tense: 'presSubj', trigger: 'a não ser que', text: 'A festa vai acontecer, a não ser que {S} ___ {O}.', persons: ALL, confusable: ['impSubj', 'futSubj', 'persInf'], why: 'a não ser que (unless) → presente do subjuntivo, even for a future condition.' },
     { id: 'j-contanto', cat: 'conjunction', tense: 'presSubj', trigger: 'contanto que', text: 'Eu te ajudo, contanto que {S} ___ {O}.', persons: NOT_1SG, confusable: ['impSubj', 'futSubj', 'persInf'], why: 'contanto que (provided that) → presente do subjuntivo.' },
-    { id: 'j-paraque-past', cat: 'conjunction', tense: 'impSubj', trigger: 'para que', text: 'Expliquei tudo para que {S} ___ {O}.', persons: NOT_1SG, confusable: ['presSubj', 'futSubj', 'persInf'], why: 'para que → subjuntivo; past main verb (expliquei) → imperfeito.' },
-    { id: 'j-antesque-past', cat: 'conjunction', tense: 'impSubj', trigger: 'antes que', text: 'Saímos antes que {S} ___ {O}.', persons: ['1sg', '3sg', '3pl'], confusable: ['presSubj', 'futSubj', 'persInf'], why: 'antes que → subjuntivo; past main verb (saímos) → imperfeito.' },
+    { id: 'j-paraque-past', cat: 'conjunction', tense: 'impSubj', trigger: 'para que', text: 'Expliquei tudo para que {S} ___ {O}.', persons: NOT_1SG, confusable: ['futSubj', 'persInf'], why: 'para que → subjuntivo; past main verb (expliquei) → imperfeito.' },
+    { id: 'j-antesque-past', cat: 'conjunction', tense: 'impSubj', trigger: 'antes que', text: 'Saímos antes que {S} ___ {O}.', persons: ['3sg', '3pl'], confusable: ['presSubj', 'futSubj', 'persInf'], why: 'antes que → subjuntivo; past main verb (saímos) → imperfeito.' },
 
     // ---- counterfactual → impSubj ----
     { id: 'f-seria', cat: 'counterfactual', tense: 'impSubj', trigger: 'Se', text: 'Se {S} ___ {O}, tudo seria mais fácil.', persons: ALL, confusable: ['futSubj', 'presSubj', 'persInf'], why: 'se + a condition contrary to present fact, with a conditional main clause (seria) → imperfeito do subjuntivo.' },
@@ -110,6 +110,18 @@
     { id: 'p-ate', cat: 'persInf', tense: 'persInf', trigger: 'Até', text: 'Até {S} ___ {O}, ninguém sai daqui.', persons: ALL, confusable: ['futSubj', 'presSubj', 'impSubj'], contrast: true, why: 'até used as a preposition + its own subject → infinitivo pessoal.' },
     { id: 'p-para', cat: 'persInf', tense: 'persInf', trigger: 'para', text: 'O professor deu uma semana para {S} ___ {O}.', persons: ALL, confusable: ['futSubj', 'presSubj', 'impSubj'], contrast: true, why: 'para (preposition) + its own subject → infinitivo pessoal. For eu/ele that’s the bare infinitive — no ending to add.' },
     { id: 'p-sem', cat: 'persInf', tense: 'persInf', trigger: 'Sem', text: 'Sem {S} ___ {O}, não dá.', persons: ALL, confusable: ['presSubj', 'futSubj', 'impSubj'], why: 'sem (preposition) + its own subject → infinitivo pessoal.' },
+    // ---- B2 triggers ----
+    { id: 'e-tomara', cat: 'emotion', tense: 'presSubj', trigger: 'Tomara que', text: 'Tomara que {S} ___ {O}.', persons: ALL, confusable: ['futSubj', 'persInf'], why: 'tomara que (BP: “let’s hope”) → presente do subjuntivo.' },
+    { id: 'd-provavel', cat: 'doubt', tense: 'presSubj', trigger: 'É provável que', text: 'É provável que {S} ___ {O}.', persons: ALL, confusable: ['futSubj', 'persInf'], why: 'probability, not fact (é provável que) → presente do subjuntivo.' },
+    { id: 'd-naoque', cat: 'doubt', tense: 'presSubj', trigger: 'Não que', text: 'Não que {S} ___ {O}, mas prefiro esperar.', persons: ALL, confusable: ['futSubj', 'persInf'], why: 'não que (“not that…”) denies the clause → presente do subjuntivo.' },
+    { id: 'j-desdeque', cat: 'conjunction', tense: 'presSubj', trigger: 'desde que', text: 'Pode contar comigo, desde que {S} ___ {O}.', persons: NOT_1SG, confusable: ['impSubj', 'futSubj', 'persInf'], why: 'desde que meaning “provided that” → presente do subjuntivo. (Meaning “since”, it takes the indicative — the sense decides the mood.)' },
+    { id: 'j-amenos', cat: 'conjunction', tense: 'presSubj', trigger: 'a menos que', text: 'O projeto não sai do papel, a menos que {S} ___ {O}.', persons: ALL, confusable: ['impSubj', 'futSubj', 'persInf'], why: 'a menos que (unless) → presente do subjuntivo, even for a future condition.' },
+    { id: 'j-semque', cat: 'conjunction', tense: 'presSubj', trigger: 'sem que', text: 'Ninguém sai daqui sem que {S} ___ {O}.', persons: ALL, confusable: ['impSubj', 'futSubj', 'persInf'], why: 'sem que + finite verb → presente do subjuntivo. Sem without que would take the infinitivo pessoal.' },
+    { id: 'j-afimdeque', cat: 'conjunction', tense: 'impSubj', trigger: 'a fim de que', text: 'Mudaram as regras a fim de que {S} ___ {O}.', persons: ['1sg', '3sg', '1pl'], confusable: ['futSubj', 'persInf'], why: 'a fim de que (purpose) → subjuntivo; past main verb (mudaram) → imperfeito.' },
+    { id: 'k-nemque', cat: 'concession', tense: 'presSubj', trigger: 'nem que', text: 'Vou até o fim, nem que {S} ___ {O}.', persons: NOT_1SG, confusable: ['futSubj', 'persInf'], why: 'nem que (“even if”) → presente do subjuntivo.' },
+    { id: 'p-apesarde', cat: 'persInf', tense: 'persInf', trigger: 'Apesar de', text: 'Apesar de {S} ___ {O}, ninguém ficou satisfeito.', persons: ALL, confusable: ['presSubj', 'impSubj', 'futSubj'], contrast: true, why: 'apesar de (preposition) + its own subject → infinitivo pessoal. Embora, a conjunction, would take the subjuntivo.' },
+    { id: 'p-por', cat: 'persInf', tense: 'persInf', trigger: 'por', text: 'O chefe ficou irritado por {S} não ___ {O}.', persons: ALL, confusable: ['presSubj', 'impSubj', 'futSubj'], contrast: true, why: 'por (“because of”) + its own subject → infinitivo pessoal; tense-free even in a past sentence.' },
+    { id: 'p-nocaso', cat: 'persInf', tense: 'persInf', trigger: 'No caso de', text: 'No caso de {S} ___ {O}, avisem a recepção.', persons: ALL, confusable: ['presSubj', 'futSubj', 'impSubj'], contrast: true, why: 'no caso de (prepositional phrase) → infinitivo pessoal. Caso on its own would take the presente do subjuntivo.' },
   ];
 
   // Fixed sentences for specific verbs. `expect` is the answer as written by
@@ -145,6 +157,19 @@
     { id: 'h-trazer-depoisde', verb: 'trazer', tense: 'persInf', person: '3pl', cat: 'persInf', trigger: 'Depois de', text: 'Depois de eles ___ o vinho, a festa começou.', expect: 'trazerem', contrast: true, why: 'depois de (preposition) → infinitivo pessoal: trazerem, built on the infinitive — no preterite stem, no tense.' },
     { id: 'h-trazer-depoisque', verb: 'trazer', tense: 'futSubj', person: '3pl', cat: 'temporal', trigger: 'Depois que', text: 'Depois que eles ___ o vinho, a festa começa.', expect: 'trouxerem', contrast: true, why: 'depois que (conjunction) + future → futuro do subjuntivo: trouxerem, built on the preterite stem.' },
     { id: 'h-fazer-fizessemos', verb: 'fazer', tense: 'impSubj', person: '1pl', cat: 'counterfactual', trigger: 'Se', text: 'Se nós ___ isso, seria um desastre.', expect: 'fizéssemos', why: 'se + hypothetical, conditional main (seria) → imperfeito do subjuntivo: fizéssemos (note the accent).' },
+    // ---- B2 vocabulary traps ----
+    { id: 'h-prever-1sg', verb: 'prever', tense: 'futSubj', person: '1sg', cat: 'futureCond', trigger: 'Se', text: 'Se eu ___ algum problema, te aviso.', expect: 'previr', contrast: true, why: 'se + possible future → futuro do subjuntivo of prever, built like ver: previr (not *prever — a very common native error).' },
+    { id: 'h-prever-3pl', verb: 'prever', tense: 'futSubj', person: '3pl', cat: 'temporal', trigger: 'Quando', text: 'Quando os analistas ___ a crise, vai ser tarde.', expect: 'previrem', contrast: true, why: 'quando + future → futuro do subjuntivo: previrem (preterite previram).' },
+    { id: 'h-requerer-imp', verb: 'requerer', tense: 'impSubj', person: '3sg', cat: 'counterfactual', trigger: 'Se', text: 'Se o caso ___ mais atenção, eu avisaria.', expect: 'requeresse', why: 'se + unreal condition → imperfeito. requerer is not a compound of querer: regular preterite → requeresse, not *requisesse.' },
+    { id: 'h-requerer-pres', verb: 'requerer', tense: 'presSubj', person: '3sg', cat: 'doubt', trigger: 'É possível que', confusable: ['futSubj', 'persInf'], text: 'É possível que o processo ___ uma nova perícia.', expect: 'requeira', why: 'possibility → presente do subjuntivo: requeira, from 1sg requeiro.' },
+    { id: 'h-propor-3pl', verb: 'propor', tense: 'persInf', person: '3pl', cat: 'persInf', trigger: 'É importante', text: 'É importante eles ___ uma solução.', expect: 'proporem', contrast: true, why: 'impersonal expression + subject, no que → infinitivo pessoal: proporem.' },
+    { id: 'h-propor-bare', verb: 'propor', tense: 'persInf', person: '1sg', cat: 'persInf', trigger: 'para', text: 'Me chamaram para eu ___ um acordo.', expect: 'propor', contrast: true, why: 'para eu + bare infinitive. Compounds of pôr never carry the circumflex: propor.' },
+    { id: 'h-propor-fut', verb: 'propor', tense: 'futSubj', person: '1pl', cat: 'futureCond', trigger: 'Se', text: 'Se nós ___ um acordo, eles aceitam?', expect: 'propusermos', contrast: true, why: 'se + possible future → futuro do subjuntivo: propusermos (pôr pattern, preterite propuseram).' },
+    { id: 'h-manter', verb: 'manter', tense: 'futSubj', person: '3sg', cat: 'temporal', trigger: 'Enquanto', text: 'Enquanto a empresa ___ essa política, nada muda.', expect: 'mantiver', contrast: true, why: 'enquanto + future → futuro do subjuntivo: mantiver (ter pattern).' },
+    { id: 'h-seja-qual', verb: 'ser', tense: 'futSubj', person: '3sg', cat: 'indefinite', trigger: 'Seja qual', confusable: ['impSubj', 'persInf'], text: 'Seja qual ___ a decisão, vamos respeitar.', expect: 'for', why: 'fixed pattern seja qual for / seja quem for: presente + futuro do subjuntivo — “whatever it turns out to be”.' },
+    { id: 'h-oquequer', verb: 'fazer', tense: 'presSubj', person: '3sg', cat: 'indefinite', trigger: 'O que quer que', confusable: ['impSubj', 'persInf'], text: 'O que quer que você ___, faça bem feito.', expect: 'faça', why: 'o que quer que (whatever) → presente do subjuntivo.' },
+    { id: 'h-intervir', verb: 'intervir', tense: 'futSubj', person: '3pl', cat: 'futureCond', trigger: 'Se', text: 'Se os vizinhos ___ na discussão, a situação piora.', expect: 'intervierem', contrast: true, why: 'se + possible future → futuro do subjuntivo: intervierem (vir pattern — not *interverem).' },
+    { id: 'h-desfazer', verb: 'desfazer', tense: 'impSubj', person: '1pl', cat: 'counterfactual', trigger: 'Se', text: 'Se nós ___ o mal-entendido, tudo seria mais simples.', expect: 'desfizéssemos', why: 'se + hypothetical, conditional main → imperfeito: desfizéssemos (fazer pattern).' },
   ];
 
   const SUBJECTS = { '1sg': ['eu'], '3sg': ['ele', 'ela', 'você'], '1pl': ['nós'], '3pl': ['eles', 'elas', 'vocês'] };
@@ -181,17 +206,25 @@
     return C.form(verb, 'futSubj', person) !== C.form(verb, 'persInf', person);
   }
 
-  function genericVerbs() {
-    return D.VERB_LIST.filter((v) => v.obj);
+  // vocab 'b2' (default) uses every verb; 'core' keeps to the seed set.
+  function inVocab(verb, vocab) {
+    return vocab !== 'core' || verb.tier === 'core';
   }
 
-  function eligibleVerbs(shell, person) {
-    return genericVerbs().filter((v) => !shell.contrast || fpDiffers(v, person));
+  function genericVerbs(vocab) {
+    return D.VERB_LIST.filter((v) => v.obj && inVocab(v, vocab));
   }
 
-  function objFor(verb, person) {
+  function eligibleVerbs(shell, person, vocab) {
+    return genericVerbs(vocab).filter((v) => !shell.contrast || fpDiffers(v, person));
+  }
+
+  // In 'core' mode only the first complement is used.
+  function objFor(verb, person, rng, vocab) {
     const plural = person === '1pl' || person === '3pl';
-    return plural && verb.objPl ? verb.objPl : verb.obj;
+    const src = plural && verb.objPl ? verb.objPl : verb.obj;
+    if (!Array.isArray(src)) return src;
+    return vocab === 'core' ? src[0] : src[Math.floor(rng() * src.length)];
   }
 
   // ---------------- frame construction ----------------
@@ -200,12 +233,12 @@
     const answer = C.form(verb, base.tense, base.person);
     const [before, after] = base.sentence.split('___');
     const options = buildOptions(verb, base.tense, base.person, base.confusable, rng);
-    return Object.assign(base, { answer, before, after, options, verbGloss: verb.gloss });
+    return Object.assign(base, { answer, before, after, options, verbGloss: verb.gloss, verbTier: verb.tier });
   }
 
-  function fromShell(shell, verbInf, person, rng) {
+  function fromShell(shell, verbInf, person, rng, vocab) {
     const verb = D.VERBS[verbInf];
-    const sentence = shell.text.replace('{S}', pick(SUBJECTS[person], rng)).replace('{O}', objFor(verb, person)).replace(/\s+/g, ' ').replace(' ,', ',');
+    const sentence = shell.text.replace('{S}', pick(SUBJECTS[person], rng)).replace('{O}', objFor(verb, person, rng, vocab)).replace(/\s+/g, ' ').replace(' ,', ',');
     return finishFrame(
       {
         id: shell.id + ':' + verbInf + ':' + person,
@@ -284,24 +317,24 @@
 
   // ---------------- candidates & coverage ----------------
 
-  function candidatesForCell(tense, person) {
+  function candidatesForCell(tense, person, vocab) {
     const out = [];
     for (const s of SHELLS) {
       if (s.tense !== tense || !s.persons.includes(person)) continue;
-      const verbs = eligibleVerbs(s, person);
+      const verbs = eligibleVerbs(s, person, vocab);
       if (verbs.length) out.push({ kind: 'shell', cat: s.cat, shell: s, verbs: verbs.map((v) => v.inf) });
     }
     for (const h of HAND_FRAMES) {
-      if (h.tense === tense && h.person === person) out.push({ kind: 'hand', cat: h.cat, hand: h });
+      if (h.tense === tense && h.person === person && inVocab(D.VERBS[h.verb], vocab)) out.push({ kind: 'hand', cat: h.cat, hand: h });
     }
     return out;
   }
 
-  function coverageReport() {
+  function coverageReport(vocab) {
     const rows = [];
     for (const t of C.TENSES) {
       for (const p of C.PERSONS) {
-        const cands = candidatesForCell(t, p);
+        const cands = candidatesForCell(t, p, vocab);
         const shells = cands.filter((c) => c.kind === 'shell');
         rows.push({
           tense: t,
@@ -319,8 +352,10 @@
   // Build-time checks. Returns a list of problems (empty = OK).
   function validateFrames() {
     const errors = [];
-    for (const r of coverageReport()) {
-      if (r.combos + r.hand === 0) errors.push('Unreachable cell: ' + C.cellLabel(r.tense, r.person));
+    for (const vocab of ['b2', 'core']) {
+      for (const r of coverageReport(vocab)) {
+        if (r.combos + r.hand === 0) errors.push('Unreachable cell (' + vocab + '): ' + C.cellLabel(r.tense, r.person));
+      }
     }
     for (const s of SHELLS) {
       if (!s.text.includes('___')) errors.push(s.id + ': no blank');
@@ -329,7 +364,7 @@
       if (s.confusable.includes(s.tense)) errors.push(s.id + ': confusable includes its own tense');
       if (s.contrast) {
         for (const p of s.persons) {
-          for (const v of eligibleVerbs(s, p)) {
+          for (const v of eligibleVerbs(s, p, 'b2')) {
             if (!fpDiffers(v, p)) errors.push(s.id + ': contrast frame admits ' + v.inf + ' ' + p);
           }
         }
@@ -355,7 +390,7 @@
    */
   function createSession(opts) {
     opts = opts || {};
-    return { rng: makeRng(opts.seed), deck: [], catCounts: {}, recentSources: [], handShare: opts.handShare == null ? 0.3 : opts.handShare };
+    return { rng: makeRng(opts.seed), vocab: opts.vocab || 'b2', deck: [], catCounts: {}, recentSources: [], handShare: opts.handShare == null ? 0.3 : opts.handShare };
   }
 
   function nextQuestion(session) {
@@ -366,7 +401,7 @@
       session.deck = shuffle(cells, rng);
     }
     const cell = session.deck.pop();
-    let cands = candidatesForCell(cell.tense, cell.person);
+    let cands = candidatesForCell(cell.tense, cell.person, session.vocab);
     const fresh = cands.filter((c) => !session.recentSources.includes(c.kind === 'shell' ? c.shell.id : c.hand.id));
     if (fresh.length) cands = fresh;
 
@@ -384,7 +419,10 @@
       q = fromHand(pick(hands, rng).hand, rng);
     } else {
       const c = pick(shells, rng);
-      q = fromShell(c.shell, pick(c.verbs, rng), cell.person, rng);
+      // At B2, favour the B2 verbs half the time so they aren't drowned out by the core set.
+      const b2 = c.verbs.filter((inf) => D.VERBS[inf].tier === 'b2');
+      const verbs = session.vocab !== 'core' && b2.length && rng() < 0.5 ? b2 : c.verbs;
+      q = fromShell(c.shell, pick(verbs, rng), cell.person, rng, session.vocab);
     }
     session.catCounts[cat] = (session.catCounts[cat] || 0) + 1;
     session.recentSources.push(q.source);

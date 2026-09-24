@@ -40,6 +40,16 @@ const REF = {
   pedir:  [['peça','peça','peçamos','peçam'], ['pedisse','pedisse','pedíssemos','pedissem'], ['pedir','pedir','pedirmos','pedirem'], ['pedir','pedir','pedirmos','pedirem']],
   dormir: [['durma','durma','durmamos','durmam'], ['dormisse','dormisse','dormíssemos','dormissem'], ['dormir','dormir','dormirmos','dormirem'], ['dormir','dormir','dormirmos','dormirem']],
   seguir: [['siga','siga','sigamos','sigam'], ['seguisse','seguisse','seguíssemos','seguissem'], ['seguir','seguir','seguirmos','seguirem'], ['seguir','seguir','seguirmos','seguirem']],
+  // B2 derived irregulars
+  manter: [['mantenha','mantenha','mantenhamos','mantenham'], ['mantivesse','mantivesse','mantivéssemos','mantivessem'], ['mantiver','mantiver','mantivermos','mantiverem'], ['manter','manter','mantermos','manterem']],
+  propor: [['proponha','proponha','proponhamos','proponham'], ['propusesse','propusesse','propuséssemos','propusessem'], ['propuser','propuser','propusermos','propuserem'], ['propor','propor','propormos','proporem']],
+  prever: [['preveja','preveja','prevejamos','prevejam'], ['previsse','previsse','prevíssemos','previssem'], ['previr','previr','previrmos','previrem'], ['prever','prever','prevermos','preverem']],
+  intervir: [['intervenha','intervenha','intervenhamos','intervenham'], ['interviesse','interviesse','interviéssemos','interviessem'], ['intervier','intervier','interviermos','intervierem'], ['intervir','intervir','intervirmos','intervirem']],
+  satisfazer: [['satisfaça','satisfaça','satisfaçamos','satisfaçam'], ['satisfizesse','satisfizesse','satisfizéssemos','satisfizessem'], ['satisfizer','satisfizer','satisfizermos','satisfizerem'], ['satisfazer','satisfazer','satisfazermos','satisfazerem']],
+  requerer: [['requeira','requeira','requeiramos','requeiram'], ['requeresse','requeresse','requerêssemos','requeressem'], ['requerer','requerer','requerermos','requererem'], ['requerer','requerer','requerermos','requererem']],
+  atingir: [['atinja','atinja','atinjamos','atinjam'], ['atingisse','atingisse','atingíssemos','atingissem'], ['atingir','atingir','atingirmos','atingirem'], ['atingir','atingir','atingirmos','atingirem']],
+  arcar: [['arque','arque','arquemos','arquem'], ['arcasse','arcasse','arcássemos','arcassem'], ['arcar','arcar','arcarmos','arcarem'], ['arcar','arcar','arcarmos','arcarem']],
+  impedir: [['impeça','impeça','impeçamos','impeçam'], ['impedisse','impedisse','impedíssemos','impedissem'], ['impedir','impedir','impedirmos','impedirem'], ['impedir','impedir','impedirmos','impedirem']],
 };
 
 // 1. Paradigms match the hand-typed reference.
@@ -66,7 +76,8 @@ for (const r of cov) check(r.combos + r.hand > 0, 'cell unreachable ' + r.tense 
 
 // 4. Simulated sessions: options, collapse, contrast constraint, deck coverage.
 for (let seed = 1; seed <= 40; seed++) {
-  const s = E.createSession({ seed });
+  const vocab = seed % 2 ? 'b2' : 'core';
+  const s = E.createSession({ seed, vocab });
   const seenCells = new Set();
   for (let i = 0; i < 160; i++) {
     const q = E.nextQuestion(s);
@@ -80,6 +91,7 @@ for (let seed = 1; seed <= 40; seed++) {
     const all = new Set(C.TENSES.flatMap((t) => C.paradigm(verb)[t]));
     forms.forEach((f) => check(all.has(f), `${q.id}: option ${f} is not a form of ${q.verb}`));
     check(!q.sentence.includes('{'), `${q.id}: unfilled slot`);
+    if (vocab === 'core') check(verb.tier === 'core', `${q.id}: B2 verb ${q.verb} in core mode`);
     if (q.contrast) check(C.form(verb, 'futSubj', q.person) !== C.form(verb, 'persInf', q.person), `${q.id}: contrast frame on ${q.verb}`);
     // no option other than the answer may be a cell the frame treats as acceptable-but-not-drilled:
     q.options.filter((o) => !o.correct).forEach((o) => {
@@ -93,6 +105,10 @@ for (let seed = 1; seed <= 40; seed++) {
 const sc = VR.scorecard.createScorecard(null);
 sc.record({ tense: 'futSubj', person: '1sg', cat: 'temporal', sentence: 'x', answer: 'y', trigger: 'Quando' }, { correct: false, ms: 1000 });
 check(sc.cell('futSubj', '1sg').n === 1 && sc.cat('temporal').acc === 0, 'scorecard tallies');
+sc.recordRound({ n: 10, ok: 7, ms: 30000 });
+sc.recordRound({ n: 10, ok: 9, ms: 20000 });
+const tot = sc.totals();
+check(tot.rounds === 2 && tot.bestPct === 90 && tot.n === 1, 'scorecard totals ' + JSON.stringify(tot));
 
 // Report
 console.log('Coverage (shell×verb combos + hand frames per cell):');

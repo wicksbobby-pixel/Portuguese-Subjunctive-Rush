@@ -9,27 +9,58 @@
 <body>
   <main id="app">
     <header class="top">
-      <h1>Verb Rush</h1>
-      <p class="sub">Português brasileiro · subjuntivo &amp; infinitivo pessoal</p>
+      <div>
+        <h1>Verb Rush</h1>
+        <p class="sub">Português brasileiro · subjuntivo &amp; infinitivo pessoal</p>
+      </div>
+      <span id="learner-chip" class="chip"></span>
     </header>
 
-    <!-- start -->
-    <section id="screen-start" class="screen">
-      <p class="lede">Read the sentence, find the trigger, then pick the form it requires. Every option is a real form of the same verb.</p>
-      <div class="settings">
-        <label>Questions
-          <select id="set-length"><option>10</option><option selected>20</option><option>40</option></select>
-        </label>
-        <label>Seconds each
-          <select id="set-time"><option value="5">5</option><option value="8" selected>8</option><option value="12">12</option><option value="0">no limit</option></select>
-        </label>
-        <label class="check"><input type="checkbox" id="set-highlight"> Highlight trigger before answering</label>
+    <!-- home: start + scorecard + stats -->
+    <section id="screen-home" class="screen">
+      <div class="panel start">
+        <div class="settings">
+          <label>Questions
+            <select id="set-length"><option>10</option><option selected>20</option><option>40</option></select>
+          </label>
+          <label>Seconds each
+            <select id="set-time"><option value="5">5</option><option value="8" selected>8</option><option value="12">12</option><option value="0">no limit</option></select>
+          </label>
+          <label>Vocabulary
+            <select id="set-vocab"><option value="b2" selected>B2 (full)</option><option value="core">Core verbs only</option></select>
+          </label>
+          <label class="check"><input type="checkbox" id="set-highlight"> Highlight trigger before answering</label>
+        </div>
+        <button id="btn-start" class="primary big">Start round</button>
+        <p class="hint">Keys: <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> to answer · <kbd>Enter</kbd> to continue</p>
       </div>
-      <div class="row">
-        <button id="btn-start" class="primary">Start</button>
-        <button id="btn-card" class="ghost">Scorecard</button>
+
+      <div id="home-empty" class="panel empty" hidden>
+        <p>No rounds yet. Your stats, the 16-cell grid and your weakest triggers show up here after your first round.</p>
       </div>
-      <p class="hint">Keys: <kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd> to answer · <kbd>Enter</kbd> to continue</p>
+
+      <div id="home-stats" hidden>
+        <div id="tiles" class="tiles"></div>
+
+        <h3>Recent rounds <span class="muted">(accuracy, oldest → newest)</span></h3>
+        <div id="rounds-strip" class="strip" role="img"></div>
+
+        <h3>Cells <span class="muted">(accuracy · attempts)</span></h3>
+        <div id="card-grid" class="grid-wrap"></div>
+        <p class="note">In Brazilian Portuguese, eu and ele share one form in all four paradigms. The 1sg and 3sg columns are tracked separately, but no option ever asks you to tell them apart.</p>
+
+        <h3>Weakest triggers</h3>
+        <ol id="weak-cats" class="weak"></ol>
+        <details class="allcats">
+          <summary>All trigger categories</summary>
+          <table id="card-cats" class="cats"></table>
+        </details>
+
+        <h3>Recent misses</h3>
+        <ol id="recent-misses" class="misses"></ol>
+
+        <div class="row"><button id="btn-reset" class="ghost danger">Reset stats</button></div>
+      </div>
     </section>
 
     <!-- drill -->
@@ -43,6 +74,7 @@
       <p id="q-verb" class="verb"></p>
       <div id="q-options" class="options"></div>
       <div id="q-feedback" class="feedback" hidden></div>
+      <div class="row"><button id="btn-quit" class="ghost small">Quit to home</button></div>
     </section>
 
     <!-- summary -->
@@ -52,22 +84,7 @@
       <ol id="sum-misses" class="misses"></ol>
       <div class="row">
         <button id="btn-again" class="primary">Again</button>
-        <button id="btn-card2" class="ghost">Scorecard</button>
-        <button id="btn-home" class="ghost">Settings</button>
-      </div>
-    </section>
-
-    <!-- scorecard -->
-    <section id="screen-card" class="screen" hidden>
-      <h2>Scorecard</h2>
-      <h3>Cells <span class="muted">(accuracy · attempts)</span></h3>
-      <div id="card-grid" class="grid-wrap"></div>
-      <p class="note">In Brazilian Portuguese, eu and ele share one form in all four paradigms. The 1sg and 3sg columns are tracked separately, but no option ever asks you to tell them apart.</p>
-      <h3>Trigger categories</h3>
-      <table id="card-cats" class="cats"></table>
-      <div class="row">
-        <button id="btn-card-back" class="primary">Back</button>
-        <button id="btn-card-reset" class="ghost danger">Reset scorecard</button>
+        <button id="btn-home" class="ghost">Home</button>
       </div>
     </section>
   </main>

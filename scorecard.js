@@ -8,7 +8,7 @@
   const KEY = 'verbRush.scorecard.v1';
 
   function empty() {
-    return { cells: {}, cats: {}, recentMisses: [] };
+    return { cells: {}, cats: {}, recentMisses: [], rounds: [] };
   }
 
   function createScorecard(storage) {
@@ -51,8 +51,32 @@
       return { n: r.n, ok: r.ok, acc: r.ok / r.n, avgMs: r.ms / r.n };
     }
 
+    // One entry per finished round: { t, n, ok, ms } (ms = total answer time).
+    function recordRound(r) {
+      state.rounds.push({ t: r.t || Date.now(), n: r.n, ok: r.ok, ms: r.ms });
+      if (state.rounds.length > 200) state.rounds.shift();
+      save();
+    }
+
+    function totals() {
+      let n = 0, ok = 0, ms = 0;
+      for (const r of Object.values(state.cells)) { n += r.n; ok += r.ok; ms += r.ms; }
+      const pcts = state.rounds.filter((r) => r.n).map((r) => Math.round((100 * r.ok) / r.n));
+      return {
+        n,
+        ok,
+        acc: n ? ok / n : null,
+        avgMs: n ? ms / n : null,
+        rounds: state.rounds.length,
+        bestPct: pcts.length ? Math.max(...pcts) : null,
+      };
+    }
+
     return {
       record,
+      recordRound,
+      totals,
+      rounds: () => state.rounds.slice(),
       cell: (tense, person) => stat(state.cells, tense + '.' + person),
       cat: (cat) => stat(state.cats, cat),
       recentMisses: () => state.recentMisses.slice(),
